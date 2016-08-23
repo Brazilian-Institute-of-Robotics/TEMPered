@@ -31,18 +31,11 @@ cmake_dependent_option(
 	"BUILD_UTILITIES;BUILD_SHARED_LIB" OFF
 )
 
-find_path(HIDAPI_HEADER_DIR hidapi.h
-	PATHS ../hidapi ../hidapi.git
-	PATH_SUFFIXES hidapi
-	DOC "The location of HIDAPI's header file"
-)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(LIBHIDAPI REQUIRED hidapi-hidraw hidapi-libusb)
 
 if (BUILD_HIDAPI_SHARED)
-	find_library(HIDAPI_LIB NAMES hidapi-hidraw hidapi-libusb
-		PATHS ../hidapi ../hidapi.git
-		PATH_SUFFIXES linux/.libs libusb/.libs linux libusb mac
-		DOC "The location of the HIDAPI shared library file"
-	)
+    set(HIDAPI_LIB ${LIBHIDAPI_LDFLAGS})
 	set(HIDAPI_STATIC_OBJECT)
 	set(HIDAPI_LINK_LIBS ${HIDAPI_LIB})
 else()
@@ -53,7 +46,6 @@ else()
 		DOC "The location of the HIDAPI static object file"
 	)
 	set(HIDAPI_STATIC_OBJECT ${HIDAPI_OBJECT})
-	find_package(PkgConfig REQUIRED)
 	if (HIDAPI_OBJECT MATCHES \(-libusb|/libusb/(.libs/)?hid\)\\.o\$)
 		pkg_check_modules(LIBUSB REQUIRED libusb-1.0)
 		set(HIDAPI_LINK_LIBS ${LIBUSB_LIBRARIES} rt pthread)
@@ -63,7 +55,7 @@ else()
 	endif()
 endif()
 
-include_directories(${HIDAPI_HEADER_DIR})
+include_directories(${LIBHIDAPI_INCLUDE_DIRS})
 
 add_subdirectory(libtempered)
 add_subdirectory(libtempered-util)

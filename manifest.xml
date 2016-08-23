@@ -1,0 +1,13 @@
+<package>
+    <description brief="C library and program for reading the TEMPer family of thermometer and hygrometer devices. http://edorfaus.wordpress.com/">
+  
+  </description>
+  <author>nmenon</author>
+  <maintainer>Rafael Brito rafael.lima@fieb.org.br</maintainer>
+  <license></license>
+  <url>http://</url>
+  <logo>http://</logo>
+  <depend package="base/cmake" />
+  <depend package="base/types" />
+  <depend name="libhidapi" />
+</package>
