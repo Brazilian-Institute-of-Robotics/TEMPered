@@ -65,6 +65,11 @@ endif()
 
 include_directories(${HIDAPI_HEADER_DIR})
 
+string (REPLACE ";" " " HIDAPI_LIB_STR "${HIDAPI_LIB}")
+
+configure_file(tempered.pc.in tempered.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/tempered.pc DESTINATION lib/pkgconfig)
+
 add_subdirectory(libtempered)
 add_subdirectory(libtempered-util)
 add_subdirectory(utils)
